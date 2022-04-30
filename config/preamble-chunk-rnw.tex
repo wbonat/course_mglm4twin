@@ -1,0 +1,44 @@
+%---- preamble-chunk-rnw.tex -------------------------------------------
+
+% Knitr.
+
+% ATTENTION: this needs `\usepackage{xcolor}'.
+\definecolor{color_line}{HTML}{333333}
+\definecolor{color_back}{HTML}{DDDDDD}
+
+% Tamanho de fonte e distância entre linhas.
+% \renewenvironment{knitrout}{
+%   \renewcommand{\baselinestretch}{0.75}%\tiny
+% }{}
+
+% Tamanho de fonte e distância entre linhas.
+\renewenvironment{knitrout}{%
+ \setlength{\topsep}{-0.25ex}
+ \renewcommand{\baselinestretch}{0.65}
+ \footnotesize
+}{}
+
+% R output e todo `verbatim'.
+\makeatletter
+% \def\verbatim@font{\linespread{0.9}\textit\normalfont\ttfamily\footnotesize}
+\def\verbatim@font{\linespread{0.9}\ttfamily\footnotesize}
+\makeatother
+
+% % Cor de fundo e margens do `verbatim'.
+% \let\oldv\verbatim
+% \let\oldendv\endverbatim
+%
+% \def\verbatim{%
+%   \par\setbox0\vbox\bgroup % Abre grupo.
+%   \vspace{-5px}            % Reduz margem superior.
+%   \oldv                    % Chama abertura do verbatim.
+% }
+% \def\endverbatim{%
+%   \oldendv                 % Chama encerramento do verbatim.
+%   % \vspace{0cm}           % Controla margem inferior.
+%   \egroup\fboxsep10px      % Fecha grupo.
+%   \usebox0
+%   % \noindent{\colorbox{color_back}{\usebox0}}\par
+% }
+
+%-----------------------------------------------------------------------

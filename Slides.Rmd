@@ -1,0 +1,190 @@
+---
+title: "Multivariate regression models for Twin data"
+subtitle: "Analysis of Twin Data in Health Science · Session IV"
+author: Prof. Wagner Hugo Bonat
+date: ""
+institute: "Ômega Data Science | Online School of Data Science"
+graphics: yes
+classoption: [serif, professionalfont, usenames, dvipsnames, aspectratio = 169]
+# bibliography: references.bib
+# csl: ../config/ABNT_UFPR_2011-Mendeley.csl
+output:
+  beamer_presentation:
+    latex_engine: xelatex
+    fig_caption: yes
+    fig_crop: no
+    highlight: haddock
+    includes:
+      # NOTE: background, color theme and logos are defined in `preamble-rmd-settings.tex`.
+      in_header: [config/preamble-settings-rmd.tex, config/preamble-global.tex, config/preamble-chunk-rmd.tex, config/preamble-commands.tex]
+      # in_header: [config/preamble-settings-rmd.tex, config/preamble-global.tex, config/preamble-commands.tex]
+    keep_tex: yes
+# http://rmarkdown.rstudio.com/beamer_presentation_format.html
+---
+
+```{r, include = FALSE}
+source("./config/setup.R")
+```
+
+# Motivation
+
+## Heredity and variation
+
+\beginAHalfColumn
+
+- Genetic epidemiology is impelled by three basic questions:
+    1. Why isn't everyone the same?
+    2. Why are children like their parents?
+    3. Why aren't children from the same parents all alike?
+
+- **Main goal: Isolate/Separate sources of variation!**
+
+\endColumns
+\beginAHalfColumn
+
+- Variation is everywhere!
+
+```{r, echo = FALSE, message = FALSE, out.width='100%', fig.height=5, fig.width=10, fig.align='center', fig.cap = 'Histogram of height and weight.'}
+library(mglm4twin)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+data(anthro)
+anthro %>%
+  pivot_longer(names_to = 'Trait',
+               values_to = 'response',
+               cols = -c(Group, Twin, age, Twin_pair)) %>%
+ggplot() +
+  geom_histogram(aes(response), bins = 20) +
+  facet_wrap(~Trait, scales = "free")
+ 
+```
+
+\endColumns
+
+
+## Motivating dataset: Anthropometric measures
+
+\beginAHalfColumn
+
+- Anthropometric measurements (weight and height).
+- 861 twin pairs: 327 DZ (dizygotic) and 534 MZ (monozygotic).
+- Bivariate continuous traits.
+- Covariates: age and group.
+- Available as an example in the OpenMx package (Neale, et al., 2016).
+- Easy access from the `mglm4twin` package.
+
+\endColumns
+\beginAHalfColumn
+
+```{r, echo = FALSE, out.width='80%', fig.height=8, fig.width=10, message = FALSE, fig.cap = "Photo by Pixabay."}
+knitr::include_graphics("./img/balanca.jpg")
+
+```
+
+\endColumns
+
+## Motivating dataset: Anthropometric measures
+
+- The dataset
+
+```{r}
+library(mglm4twin)
+data(anthro)
+glimpse(anthro)
+```
+
+
+## Graphing and Quantifying Familial Resemblance
+
+```{r, echo = FALSE, out.width='80%', fig.height=5, fig.width=10, message = FALSE, fig.cap = "Dispersion diagram by zygosity · Trait weight."}
+data_graph <- anthro %>% select(weight, Twin, Twin_pair, Group) %>%
+  pivot_wider(names_from = 'Twin_pair',
+              values_from = c('weight')) 
+names(data_graph)[3:4] <- c("Twin_1", "Twin_2")
+ggplot(data_graph) +
+  geom_point(aes(y = Twin_1, x = Twin_2)) +
+  geom_smooth(aes(y = Twin_1, x = Twin_2), method = 'lm') +
+  facet_wrap(~ Group, scales = "free")
+
+```
+
+## Multiple traits
+
+```{r, echo = FALSE, out.width='80%', fig.height=5, fig.width=10, message = FALSE, fig.cap = "Dispersion diagram by zygosity · Weight vs Height."}
+data_graph2 <- anthro %>% select(weight, height, Twin, Twin_pair, Group) %>%
+  pivot_wider(names_from = 'Twin_pair',
+              values_from = c('height', 'weight'))
+ggplot(data_graph2) +
+  geom_point(aes(y = height_1, x = weight_1)) +
+  geom_smooth(aes(y = height_1, x = weight_1), method = 'lm') +
+  facet_wrap(~ Group)
+```
+
+## Building and Fitting Models
+
+```{r, echo = FALSE, out.width='75%', fig.height=8, fig.width=10, message = FALSE, fig.cap = "Diagram of the interrelationship between theory, model and empirical observation. Adapted from Neale and Maes (1992)."}
+knitr::include_graphics("./img/model.png")
+```
+
+## Challenges for model-building in Twin data analyses
+
+\beginAHalfColumn
+
+- Decompose sources of variation
+    1. Genetic Effects.
+    2. Environmental Effects.
+    3. Genotype-Environment Interaction.
+
+- Traits types
+    1. Binary and binomial data.
+    2. Bounded data and continuous proportions.
+    3. Under-, equi- and over-dispersed count data.
+    4. Semi-continuous data (continuous $+$ mass at zero).
+    5. Symmetric and assymetric continuous data.
+
+- Multiple traits of mixed types.
+
+\endColumns
+\beginAHalfColumn
+
+
+```{r, echo = FALSE, out.width='80%', fig.height=8, fig.width=10, message = FALSE, fig.cap = "Photo by Magda Ehlers from Pexels."}
+knitr::include_graphics("./img/blocks.jpg")
+
+```
+
+\endColumns
+
+## Importance and statistical approaches
+
+- Multivariate twin and family studies are important tools to:
+    1. Determine traits inheritance;
+    2. Determine the influence of genetic and environmental effects on traits.
+- Statistical challenge:
+    1. Model the covariance structure to take into account the genetic 
+    and environmental structures induced by the twin and family designs.
+- Orthodox approaches:
+    1. Structural equation modelling (SEM);
+	  2. Linear mixed models (LMM).
+- Main limitations of SEM and LMM:
+    1. Both deal only with Gaussian (symmetric) data;
+    2. Standard computational implementations are difficult to 
+    adapt for the analysis of twin and family data.
+
+
+# Multivariate generalized linear models for Twin and Family data
+
+### mglm4twin
+- Propose a flexible statistical modelling framework to deal with multivariate twin and family data.
+- The proposed approach deals with:
+    1. Binary and binomial data;
+    2. Bounded data and continuous proportions;
+    3. Under-, equi- and over-dispersed count data.
+    4. Semi-continuous data (continuous $+$ mass at zero);
+    5. Symmetric and assymetric continuous data.
+    6. Combination of all the previous mentioned data.
+- Propose an estimating function approach for estimation and inference.
+
+
+
