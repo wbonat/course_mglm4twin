@@ -49,8 +49,8 @@
 }
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -164,15 +164,15 @@
 % \usepackage{xltxtra}
 %
 % \setbeamerfont{title page}{family=\fontspec{Oswald}}
-\setbeamerfont{title}{family=\fontspec{Oswald-Bold}}
-\setbeamerfont{subtitle}{family=\fontspec{Oswald-Medium}}
-\setbeamerfont{frametitle}{family=\fontspec{Oswald-Bold}}
+%\setbeamerfont{title}{family=\fontspec{Oswald-Bold}}
+%\setbeamerfont{subtitle}{family=\fontspec{Oswald-Medium}}
+%\setbeamerfont{frametitle}{family=\fontspec{Oswald-Bold}}
 
 % \setbeamerfont{title in head/foot}{family=\fontspec{Oswald-Medium}}
 % \setbeamerfont{author in head/foot}{family=\fontspec{Oswald-Medium}}
-\setbeamerfont{date in head/foot}{family=\fontspec{Oswald-Light}}
-\setbeamerfont{section in head/foot}{family=\fontspec{Oswald-Light}}
-\setbeamerfont{subsection in head/foot}{family=\fontspec{Oswald-Light}}
+%\setbeamerfont{date in head/foot}{family=\fontspec{Oswald-Light}}
+%\setbeamerfont{section in head/foot}{family=\fontspec{Oswald-Light}}
+%\setbeamerfont{subsection in head/foot}{family=\fontspec{Oswald-Light}}
 
 \setromanfont{Cardo}
 \setsansfont{Cardo}
@@ -195,7 +195,7 @@
 \usepackage[makeroom]{cancel}
 % \usepackage{ifxetex, ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
 \usepackage[shorthands=off, main=brazil]{babel}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -579,7 +579,7 @@
 }
 
 %-----------------------------------------------------------------------
-\ifluatex
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
@@ -790,7 +790,7 @@
 \endColumns
 \end{frame}
 
-\begin{frame}{Importance and statistical approaches'}
+\begin{frame}{Importance and statistical approaches}
 \protect\hypertarget{importance-and-statistical-approaches}{}
 \begin{itemize}
 \tightlist
@@ -833,6 +833,411 @@
     Standard computational implementations are difficult to adapt for
     the analysis of twin and family data.
   \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\hypertarget{multivariate-generalized-linear-models}{%
+\section{Multivariate generalized linear
+models}\label{multivariate-generalized-linear-models}}
+
+\begin{frame}[fragile]{Multivariate generalized linear models (mglm):
+What is it?}
+\protect\hypertarget{multivariate-generalized-linear-models-mglm-what-is-it}{}
+\begin{itemize}
+\tightlist
+\item
+  Flexible statistical modelling framework to deal with multivariate
+  traits.
+\item
+  Tailored for twin and family data by Bonat and Hjelmborg (2022).
+\item
+  The mglm approach deals with:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Binary and binomial data;
+  \item
+    Bounded data and continuous proportions;
+  \item
+    Under-, equi- and over-dispersed count data.
+  \item
+    Semi-continuous data (continuous \(+\) mass at zero);
+  \item
+    Symmetric and assymetric continuous data.
+  \item
+    Combination of all the previous mentioned data.
+  \end{enumerate}
+\item
+  Estimation and inference based on estimating functions (Bonat and
+  Jorgense, 2016).
+\item
+  Computational implementation available through the \texttt{mglm4twin}
+  package.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate generalized linear models (mglm):
+Non-standard features}
+\protect\hypertarget{multivariate-generalized-linear-models-mglm-non-standard-features}{}
+\beginAHalfColumn
+
+\begin{itemize}
+\tightlist
+\item
+  Extend standard measures of genetic studies such as:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Bivariate heritability, environmentability and common
+    environmentability;
+  \item
+    Genetic, environmental and phenotypic correlations,
+  \end{enumerate}
+\end{itemize}
+
+to non-Gaussian traits.
+
+\begin{itemize}
+\tightlist
+\item
+  Provide a flexible framework for modelling the dispersion parameters
+  as functions of potential covariates.
+\item
+  Provide software implementation in \texttt{R}.
+\end{itemize}
+
+\endColumns
+\beginAHalfColumn
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{./img/Paper} 
+
+}
+
+\end{figure}
+
+\endColumns
+\end{frame}
+
+\hypertarget{multivariate-generalized-linear-models-for-twin-data}{%
+\section{Multivariate generalized linear models for twin
+data}\label{multivariate-generalized-linear-models-for-twin-data}}
+
+\begin{frame}{Generalized linear models for twin data}
+\protect\hypertarget{generalized-linear-models-for-twin-data}{}
+\begin{itemize}
+\tightlist
+\item
+  Let \(Y_{i}\) be a \(2 \times 1\) random vector of the i\(th\) twin
+  pair for \(i = 1, \ldots, n\).
+\item
+  Let \(\mathbf{x}_{i} = (x_{i1}, \ldots, x_{ik})^{\top}\) denote a
+  \(2 \times k\) design matrix.
+\item
+  Let \(\boldsymbol{\beta}\) be a \(k \times 1\) parameter vector.
+\item
+  Consider \((y_{i},\mathbf{x}_{i})\), where \(y_{i}'s\) are iid
+  realizations of \(Y_{i}\) according to an \textbf{unspecified}
+  bivariate distribution, whose expectation and variance are given by
+  \begin{eqnarray}
+  \label{modelGLM}
+  \mathrm{E}(Y_i) &=& \mu_i = g^{-1}(\mathbf{x}_{i}^{\top}\beta)  \nonumber \\
+  \mathrm{var}(Y_i) &=& \Sigma_i = \mathrm{V}(\mu_i;p)^{\frac{1}{2}}\Omega\mathrm{V}(\mu_i;p)^{\frac{1}{2}}.
+  \end{eqnarray}
+\item
+  \(g\) some suitable link function.
+\item
+  \(\mathrm{V}(\mu_i;p) = \mathrm{diag}(\vartheta(\mu_i;p))\), where
+  \(\vartheta(\mu_i;p)\) describes the mean and variance relation and
+  \(p\) is the power parameter (to be estimated).
+\item
+  \(\Omega\) is a \(2 \times 2\) dispersion matrix.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Generalized linear models for twin data}
+\protect\hypertarget{generalized-linear-models-for-twin-data-1}{}
+\begin{itemize}
+\tightlist
+\item
+  The models decompose the covariance matrix into two components.
+  \[ \mathrm{var}(Y_i) = \Sigma_i = \mathrm{V}(\mu_i;p)^{\frac{1}{2}}\Omega\mathrm{V}(\mu_i;p)^{\frac{1}{2}}\]
+\item
+  \(\mathrm{V}(\mu_i;p)\) deals with non-Gaussianity.
+\item
+  Variance/dispersion functions
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \(\vartheta(\mu;p) = \mu^p\) characterizes the Tweedie distribution
+    deals with continuous and semi-continuous data. Gaussian \((p=0)\),
+    Gamma \((p=2)\) and inverse Gaussian \((p=3)\).
+  \item
+    \(\vartheta(\mu;p) = \mu + \tau \mu^p\) characterizes the
+    Poisson-Tweedie distribution deals with count data. Neyman-type A
+    \((p=1)\), negative binomial \((p=2)\) and PIG \((p=3)\).
+  \item
+    \(\vartheta(\mu;p) = \mu^p (1- \mu)^p\) generalization of binomial
+    variance function deals with binary, binomial and bounded data.
+  \end{enumerate}
+\item
+  \(p\) is an index that identifies the distribution.
+\item
+  In practice, we estimate \(p\) which works as an automatic model
+  selection.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Generalized linear models for twin data}
+\protect\hypertarget{generalized-linear-models-for-twin-data-2}{}
+\begin{itemize}
+\tightlist
+\item
+  \(\Omega\) models the dependence between twin pair.
+\item
+  Polygenic ACDE model has the components \begin{equation*}
+  \label{components}
+  \mathrm{A} = \begin{bmatrix}
+  1 & a\\ 
+  a & 1
+  \end{bmatrix}, \quad
+  \mathrm{C} = \begin{bmatrix}
+  1 & 1\\ 
+  1 & 1
+  \end{bmatrix}, \quad
+  \mathrm{D} = \begin{bmatrix}
+  1 & d\\ 
+  d & 1
+  \end{bmatrix}\quad \text{and} \quad
+  \mathrm{E} \begin{bmatrix}
+  1 & 0\\ 
+  0 & 1
+  \end{bmatrix}.
+  \end{equation*}
+\item
+  Dispersion matrix is modelled by \begin{equation}
+  \label{linearCovariance}
+  \Omega = \tau_A \mathrm{A} + \tau_C \mathrm{C} + \tau_D \mathrm{D} + \tau_E \mathrm{E},
+  \end{equation} where \(a=1\) and \(d = 1\) for MZ twins and
+  \(a=\frac{1}{2}\) and \(d = \frac{1}{4}\) for DZ twins.
+\item
+  Plugging Eq.(\ref{linearCovariance}) in Eq.(\ref{modelGLM}), we have a
+  flexible class of models to deal with twin data.
+\item
+  But, still only one trait.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate GLMs for twin data}
+\protect\hypertarget{multivariate-glms-for-twin-data}{}
+\begin{itemize}
+\tightlist
+\item
+  Let \(\mathbf{Y}_{ir}\) be the \(2 \times 1\) response vector of the
+  r\(th\) trait for \(r = 1, \ldots, R\).
+\item
+  Let \(\mathbf{x}_{ir} = (x_{ir1}, \ldots, x_{irk})^{\top}\) be the
+  \(2 \times k_r\) design matrix.
+\item
+  Let \(\boldsymbol{\beta}_r\) be the \(k_r \times 1\) parameter
+  vectors.
+\item
+  Let \(\mathbf{Y}_i = (Y_{i1}^{\top}, \ldots, Y_{iR}^{\top}){^\top}\)
+  denote the \(2R \times 1\) stacked vector of response variables.
+\item
+  Multivariate GLMs for twin data \begin{eqnarray}
+  \label{modelMGLM}
+  \mathrm{E}(\mathbf{Y}_i) &=& \boldsymbol{\mu}_{i} = (g_1^{-1}(\mathbf{x}_{i1}^{\top} \boldsymbol{\beta}_1), \ldots, g_{R}^{-1}(\mathbf{x}_{iR}^{\top} \boldsymbol{\beta}_R))  \nonumber \\
+  \mathrm{var}(\mathbf{Y}_i) &=& \boldsymbol{\Sigma}_i = \mathrm{V}(\boldsymbol{\mu}_i;\boldsymbol{p})^{\frac{1}{2}}\boldsymbol{\Omega}\mathrm{V}(\boldsymbol{\mu}_i;\boldsymbol{p})^{\frac{1}{2}}.
+  \end{eqnarray}
+\item
+  \(\mathrm{V}(\boldsymbol{\mu}_i; \boldsymbol{p}) = \mathrm{diag}(\vartheta_1(\mu_1;p_1), \ldots, \vartheta_R(\mu_R;p_R))\),
+\item
+  \(\boldsymbol{p} = (p_1, \ldots, p_R)\) is an \(R \times 1\) vector of
+  power parameters.
+\item
+  \(\boldsymbol{\Omega}\) is a \(2R \times 2R\) dispersion matrix.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multivariate GLMs for twin data}
+\protect\hypertarget{multivariate-glms-for-twin-data-1}{}
+\begin{itemize}
+\tightlist
+\item
+  Specification of \(\boldsymbol{\Omega}\) is crucial.
+\item
+  Let \(\boldsymbol{\nabla}_{r r^{\prime}}\) denote an \(R \times R\)
+  matrix, whose entries \(r = r^{\prime}\) and \(r^{\prime} = r\) are
+  equal to \(1\) and \(0\) elsewhere, for \(r = 1, \ldots, R\) and
+  \(r^{\prime} \leq r\). \begin{eqnarray}
+  \label{multACDE}
+  \boldsymbol{\Omega} &=& 
+  \tau_{A_{rr\prime}} \left\{ \boldsymbol{\nabla}_{rr\prime} \otimes \mathrm{A} \right\} +  
+  \tau_{C_{rr\prime}} \left\{ \boldsymbol{\nabla}_{rr\prime} \otimes \mathrm{C} \right\} \nonumber \\ &+& 
+  \tau_{D_{rr\prime}} \left\{ \boldsymbol{\nabla}_{rr\prime} \otimes \mathrm{D} \right\} +  
+  \tau_{E_{rr\prime}} \left\{ \boldsymbol{\nabla}_{rr\prime} \otimes \mathrm{E} \right\},
+  \end{eqnarray} where
+  \(\tau_{A_{rr\prime}}, \tau_{C_{rr\prime}}, \tau_{D_{rr\prime}}\) and
+  \(\tau_{E_{rr\prime}}\) are dispersion parameters associated with the
+  additive genetic, common environment, dominance genetic and unique
+  environment effects.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dispersion matrix}
+\protect\hypertarget{dispersion-matrix}{}
+\begin{itemize}
+\tightlist
+\item
+  Bivariate case \small\{ \begin{eqnarray*}
+  \boldsymbol{\Omega} = &\tau_{A_{11}} & \nonumber
+  \begin{bmatrix}
+  \mathrm{A} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{0}
+  \end{bmatrix} + \tau_{A_{22}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{A}
+  \end{bmatrix} + \tau_{A_{12}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{A} \\ 
+  \mathrm{A} & \mathrm{0}
+  \end{bmatrix} + \\ \nonumber
+  & \tau_{C_{11}} &
+  \begin{bmatrix}
+  \mathrm{C} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{0}
+  \end{bmatrix} + \tau_{C_{22}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{C}
+  \end{bmatrix} + \tau_{C_{12}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{C} \\ 
+  \mathrm{C} & \mathrm{0}
+  \end{bmatrix} + \\
+  &\tau_{E_{11}}& 
+  \begin{bmatrix}
+  \mathrm{E} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{0}
+  \end{bmatrix} + \tau_{E_{22}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{0} \\ 
+  \mathrm{0} & \mathrm{E}
+  \end{bmatrix} + \tau_{E_{12}}
+  \begin{bmatrix}
+  \mathrm{0} & \mathrm{E} \\ 
+  \mathrm{E} & \mathrm{0}
+  \end{bmatrix}.
+  \end{eqnarray*} \}
+\item
+  Note: ACDE model is unidentifiable.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measures of interest}
+\protect\hypertarget{measures-of-interest}{}
+\begin{itemize}
+\tightlist
+\item
+  Broad sense bivariate heritability, common environmentality and
+  environmentality: \begin{eqnarray*}
+  h_{rr^{\prime}} &=& \frac{\tau_{A_{rr^{\prime}}} + \tau_{D_{rr^{\prime}}} } {\tau_{A_{rr^{\prime}}} + \tau_{C_{rr^{\prime}}} + \tau_{E_{rr^{\prime}}} }, \\
+  c_{rr^{\prime}} &=& \frac{\tau_{C_{rr^{\prime}}} } {\tau_{A_{rr^{\prime}}} + \tau_{C_{rr^{\prime}}} + \tau_{E_{rr^{\prime}}} } \quad \text{and} \quad \\
+  e_{rr^{\prime}} &=& \frac{\tau_{E_{rr^{\prime}}} } {\tau_{A_{rr^{\prime}}} + \tau_{C_{rr^{\prime}}} + \tau_{E_{rr^{\prime}}} }.
+  \end{eqnarray*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measures of interest}
+\protect\hypertarget{measures-of-interest-1}{}
+\begin{itemize}
+\item
+  Genetic, common environmental and environmental correlations:
+  \begin{eqnarray*}
+  r_{G_{rr^{\prime}}} &=& \frac{ \tau_{A_{rr^{\prime}}} + \tau_{D_{rr^{\prime}}} }{ \sqrt{\tau_{A_{rr}} + \tau_{D_{rr}}} \sqrt{\tau_{A_{r^{\prime}r^{\prime}}} + \tau_{D_{r^{\prime}r^{\prime}}} } },  \\
+  r_{C_{rr^{\prime}}} &=& \frac{ \tau_{C_{rr^{\prime}}} }{ \sqrt{\tau_{C_{rr}}} \sqrt{\tau_{C_{r^{\prime}r^{\prime}}} } } \quad \text{and} \quad
+  r_{E_{rr^{\prime}}} = \frac{ \tau_{E_{rr^{\prime}}} }{ \sqrt{\tau_{E_{rr}}} \sqrt{\tau_{E_{r^{\prime}r^{\prime}}} } }.
+  \end{eqnarray*}
+\item
+  Phenotypic correlation \begin{equation*}
+  r_{P_{rr^{\prime}}} = \frac{\tau_{Prr^{\prime}}}{\sqrt{ \tau_{Prr}}\sqrt{ \tau_{Pr^{\prime}r^{\prime}}} },
+  \end{equation*} where
+  \(\tau_{Prr^{\prime}} = \tau_{Arr^{\prime}} + \tau_{C{rr^{\prime}}} + \tau_{D{rr^{\prime}}} + \tau_{E{rr^{\prime}}}.\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Modelling the dispersion parameters}
+\protect\hypertarget{modelling-the-dispersion-parameters}{}
+\begin{itemize}
+\tightlist
+\item
+  Interest to model the component \(\tau_A\) in a regression model
+  fashion.
+\item
+  Let \(\boldsymbol{z}_i\) be a \((2 \times q)\) design matrix.
+  \begin{equation*}
+  \boldsymbol{z}_i = \begin{bmatrix}
+  1 & z_{i11} & \ldots & z_{i1q} \\ 
+  1 & z_{i21} & \ldots & z_{i2q}
+  \end{bmatrix}.
+  \end{equation*}
+\item
+  Let
+  \(\boldsymbol{\tau_A} = (\tau_A(0), \tau_A(1), \ldots, \tau_A(q))\)
+  denote the \((q \times 1)\) vector of dispersion parameters.
+\item
+  Dispersion components associated to the additive genetic effect
+  \begin{equation}
+  \label{regdisp}
+  \tau_{A(0)}
+  \begin{bmatrix}
+  1\\ 
+  1
+  \end{bmatrix} \circ \mathrm{A} + 
+  \tau_{A(1)} 
+  \begin{bmatrix}
+  z_{i11}\\ 
+  z_{i21}
+  \end{bmatrix} \circ \mathrm{A} + \ldots 
+  \tau_{A(q)} 
+  \begin{bmatrix}
+  z_{i1q}\\ 
+  z_{i2q}
+  \end{bmatrix} \circ \mathrm{A},
+  \end{equation} where \(\circ\) denotes the Hadamard product.
+\item
+  All dispersion parameters can be modelled as in Eq.(\ref{regdisp}) and
+  the model remains a linear covariance model.
+\end{itemize}
+\end{frame}
+
+\hypertarget{estimation-and-inference}{%
+\section{Estimation and Inference}\label{estimation-and-inference}}
+
+\begin{frame}{Estimation and Inference}
+\protect\hypertarget{estimation-and-inference-1}{}
+\begin{itemize}
+\tightlist
+\item
+  Estimation and inference is carried out using an estimating function
+  approach.
+\item
+  Fitting procedure adapted from Bonat and J\o rgensen, 2016.
+\item
+  Quasi-score estimating functions for regression parameters.
+\item
+  Pearson estimating functions for power and dispersion parameters.
+\item
+  Computational implementation in \texttt{R} through the
+  \texttt{mglm4twin}.
+\item
+  Available on github \texttt{https://github.com/wbonat/mglm4twin}.
 \end{itemize}
 \end{frame}
 

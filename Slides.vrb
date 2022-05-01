@@ -1,0 +1,34 @@
+\frametitle{Multivariate generalized linear models (mglm): What is it?}
+\protect\hypertarget{multivariate-generalized-linear-models-mglm-what-is-it}{}
+\begin{itemize}
+\tightlist
+\item
+  Flexible statistical modelling framework to deal with multivariate
+  traits.
+\item
+  Tailored for twin and family data by Bonat and Hjelmborg (2022).
+\item
+  The mglm approach deals with:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Binary and binomial data;
+  \item
+    Bounded data and continuous proportions;
+  \item
+    Under-, equi- and over-dispersed count data.
+  \item
+    Semi-continuous data (continuous \(+\) mass at zero);
+  \item
+    Symmetric and assymetric continuous data.
+  \item
+    Combination of all the previous mentioned data.
+  \end{enumerate}
+\item
+  Estimation and inference based on estimating functions (Bonat and
+  Jorgense, 2016).
+\item
+  Computational implementation available through the \texttt{mglm4twin}
+  package.
+\end{itemize}
