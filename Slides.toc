@@ -3,3 +3,5 @@
 \beamer@sectionintoc {2}{Multivariate generalized linear models}{11}{0}{2}
 \beamer@sectionintoc {3}{Multivariate generalized linear models for twin data}{14}{0}{3}
 \beamer@sectionintoc {4}{Estimation and Inference}{24}{0}{4}
+\beamer@sectionintoc {5}{Data analyses}{26}{0}{5}
+\beamer@sectionintoc {6}{Discussion}{32}{0}{6}

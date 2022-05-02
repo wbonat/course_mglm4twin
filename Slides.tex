@@ -49,8 +49,8 @@
 }
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{iftex}
-\ifPDFTeX
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -164,15 +164,15 @@
 % \usepackage{xltxtra}
 %
 % \setbeamerfont{title page}{family=\fontspec{Oswald}}
-%\setbeamerfont{title}{family=\fontspec{Oswald-Bold}}
-%\setbeamerfont{subtitle}{family=\fontspec{Oswald-Medium}}
-%\setbeamerfont{frametitle}{family=\fontspec{Oswald-Bold}}
+\setbeamerfont{title}{family=\fontspec{Oswald-Bold}}
+\setbeamerfont{subtitle}{family=\fontspec{Oswald-Medium}}
+\setbeamerfont{frametitle}{family=\fontspec{Oswald-Bold}}
 
 % \setbeamerfont{title in head/foot}{family=\fontspec{Oswald-Medium}}
 % \setbeamerfont{author in head/foot}{family=\fontspec{Oswald-Medium}}
-%\setbeamerfont{date in head/foot}{family=\fontspec{Oswald-Light}}
-%\setbeamerfont{section in head/foot}{family=\fontspec{Oswald-Light}}
-%\setbeamerfont{subsection in head/foot}{family=\fontspec{Oswald-Light}}
+\setbeamerfont{date in head/foot}{family=\fontspec{Oswald-Light}}
+\setbeamerfont{section in head/foot}{family=\fontspec{Oswald-Light}}
+\setbeamerfont{subsection in head/foot}{family=\fontspec{Oswald-Light}}
 
 \setromanfont{Cardo}
 \setsansfont{Cardo}
@@ -202,6 +202,7 @@
 \usepackage{setspace}
 \usepackage{comment}
 \usepackage{icomma}
+\usepackage{multirow}
 
 %-----------------------------------------------------------------------
 % Algumas configurações.
@@ -579,7 +580,7 @@
 }
 
 %-----------------------------------------------------------------------
-\ifLuaTeX
+\ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
@@ -1092,9 +1093,8 @@ data}\label{multivariate-generalized-linear-models-for-twin-data}}
 \begin{frame}{Dispersion matrix}
 \protect\hypertarget{dispersion-matrix}{}
 \begin{itemize}
-\tightlist
 \item
-  Bivariate case \small\{ \begin{eqnarray*}
+  Bivariate case \begin{eqnarray*}
   \boldsymbol{\Omega} = &\tau_{A_{11}} & \nonumber
   \begin{bmatrix}
   \mathrm{A} & \mathrm{0} \\ 
@@ -1134,7 +1134,7 @@ data}\label{multivariate-generalized-linear-models-for-twin-data}}
   \mathrm{0} & \mathrm{E} \\ 
   \mathrm{E} & \mathrm{0}
   \end{bmatrix}.
-  \end{eqnarray*} \}
+  \end{eqnarray*}
 \item
   Note: ACDE model is unidentifiable.
 \end{itemize}
@@ -1238,6 +1238,137 @@ data}\label{multivariate-generalized-linear-models-for-twin-data}}
   \texttt{mglm4twin}.
 \item
   Available on github \texttt{https://github.com/wbonat/mglm4twin}.
+\end{itemize}
+\end{frame}
+
+\hypertarget{data-analyses}{%
+\section{Data analyses}\label{data-analyses}}
+
+\begin{frame}{Data set 1: Bivariate dichotomous data}
+\protect\hypertarget{data-set-1-bivariate-dichotomous-data}{}
+\begin{itemize}
+\tightlist
+\item
+  Bronchopulmonary dysplasia (BPD) and respiratory distress syndrome
+  (RDS) on preterm infants.
+\item
+  Both diseases are lung related and expected to have a genetic
+  component.
+\item
+  Dataset consists of \(200\) twin-pairs being \(137\) DZ and \(63\) MZ.
+\item
+  Covariates: birth weight (BW), gestation age (GA) and gender (1: male
+  and 0: female).
+\item
+  Bivariate ACE model and its special cases as well as their univariate
+  counterparts.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data set 1: Results}
+\protect\hypertarget{data-set-1-results}{}
+\begin{itemize}
+\tightlist
+\item
+  Multivariate AE model provides the best balance between
+  goodness-of-fit and complexity. \tiny
+
+  \begin{table}[]
+  \caption{Pseudo log-likelihood (\texttt{pll}) values along with the pseudo \textit{Akaike} (\texttt{pAIC}), Bayesian ($pBIC$) information criterion and degrees of freedom (df) by fitted models - Bivariate binary twin data.}
+  \label{tab:dataset3}
+  \begin{tabular}{lrrrrrrrr}
+  \hline
+  \multicolumn{1}{|l|}{\multirow{3}{*}{Criterion}} & \multicolumn{8}{c|}{Models}                                                                                                                                                                                   \\ \cline{2-9} 
+  \multicolumn{1}{|l|}{}                           & \multicolumn{4}{c|}{Univariate}                                                                       & \multicolumn{4}{c|}{Multivariate}                                                                     \\ \cline{2-9} 
+  \multicolumn{1}{|l|}{}                           & \multicolumn{1}{l|}{ACE} & \multicolumn{1}{l|}{CE} & \multicolumn{1}{l|}{AE} & \multicolumn{1}{l|}{E} & \multicolumn{1}{l|}{ACE} & \multicolumn{1}{l|}{CE} & \multicolumn{1}{l|}{AE} & \multicolumn{1}{l|}{E} \\ \hline
+  pll  & $-323.03$ & $-334.97$ & $-324.22$ & $-359.99$ & $-311.86$ & $-323.82$ & $-312.90$ & $-347.59$ \\
+  pAIC & $686.06$  & $705.94$  & $684.44$  & $751.98$  & $669.72$  & $687.64$  & $665.80$  & $729.18$   \\
+  pBIC & $779.75$  & $742.04$  & $748.56$  & $774.86$  & $777.47$  & $781.33$  & $759.49$  & $808.82$ \\
+  df   & $20$      & $18$      & $18$      & $16$      & $23$      & $20$      & $20$      &  $17$ \\ \hline            
+  \end{tabular}
+  \end{table}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data set 1: Results}
+\protect\hypertarget{data-set-1-results-1}{}
+\begin{table}[]
+\caption{Parameter estimates and standard errors for some genetic and environment indices of interest - Bivariate binary twin data.}
+\label{tab:dataset3gen}
+\begin{tabular}{lrrr}
+\hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{Indices}} & \multicolumn{3}{c|}{Traits} \\ \cline{2-4} 
+\multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{BPD} & \multicolumn{1}{l|}{RDS} & \multicolumn{1}{l|}{BPD $\times$ RDS} \\ \hline
+Heritability            & $0.70(0.15)$ & $0.43(0.07)$ & $0.98(0.18)$ \\
+Environmentality        & $0.30(0.15)$ & $0.57(0.07)$ & $0.02(0.18)$  \\
+Genetic correlation     & $--$         & $--$         & $0.45(0.11)$ \\
+Environment correlation & $--$         & $--$         & $0.01(0.11)$ \\ \hline                                        
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Data set 2: Bivariate continuous data}
+\protect\hypertarget{data-set-2-bivariate-continuous-data}{}
+\begin{itemize}
+\tightlist
+\item
+  Traits of interest: body weight and height measures.
+\item
+  Data set consists of \(861\)\textasciitilde(\(327\) DZ and \(534\) MZ)
+  twin-pairs.
+\item
+  These traits are well-known to be highly genetic determined and
+  correlated.
+\item
+  Covariate age was used for modelling both the mean and covariance
+  structures.
+\item
+  Responses and covariates were standardized (mean zero and variance
+  one).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data set 2: Results}
+\protect\hypertarget{data-set-2-results}{}
+\begin{center}\includegraphics[width=0.65\linewidth]{img/FigDataset4} \end{center}
+\end{frame}
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+\begin{frame}{Main results}
+\protect\hypertarget{main-results}{}
+\begin{itemize}
+\tightlist
+\item
+  Flexible multivariate statistical modelling framework to deal with
+  twin data.
+\item
+  Second-moment assumptions.
+\item
+  General framework for estimation based on estimating function.
+\item
+  Efficient algorithms for estimation.
+\item
+  Asymptotic theory (Godambe Information).
+\item
+  General software implementation in \texttt{R} (\texttt{mglm4twin}
+  package).
+\item
+  Extension of the main genetic measures to non-Gaussian data.
+\item
+  Future research topics
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Weighted estimating functions.
+  \item
+    Time to event data.
+  \end{enumerate}
+\item
+  Check the webpage for more examples
+  \href{http://www.leg.ufpr.br/~wagner/mglm4twin}{mglm4twin}.
 \end{itemize}
 \end{frame}
 

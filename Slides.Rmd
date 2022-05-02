@@ -3,6 +3,10 @@ title: "Multivariate regression models for Twin data"
 subtitle: "Analysis of Twin Data in Health Science · Session IV"
 author: Prof. Wagner Hugo Bonat
 date: ""
+header-includes:
+- \usepackage[T1]{fontenc}
+- \usepackage{lmodern}
+- \usepackage{babel}
 institute: "Ômega Data Science | Online School of Data Science"
 graphics: yes
 classoption: [serif, professionalfont, usenames, dvipsnames, aspectratio = 169]
@@ -307,7 +311,6 @@ where $\tau_{A_{rr\prime}}, \tau_{C_{rr\prime}}, \tau_{D_{rr\prime}}$ and $\tau_
 ## Dispersion matrix
 
 - Bivariate case
-\small{
 \begin{eqnarray*}
 \boldsymbol{\Omega} = &\tau_{A_{11}} & \nonumber
 \begin{bmatrix}
@@ -349,7 +352,7 @@ where $\tau_{A_{rr\prime}}, \tau_{C_{rr\prime}}, \tau_{D_{rr\prime}}$ and $\tau_
 \mathrm{E} & \mathrm{0}
 \end{bmatrix}.
 \end{eqnarray*}
-}
+
 - Note: ACDE model is unidentifiable.
 
 ## Measures of interest
@@ -431,6 +434,43 @@ a linear covariance model.
 - Covariates: birth weight (BW), gestation age (GA) and gender (1: male and 0: female).
 - Bivariate ACE model and its special cases as well as their univariate counterparts.
 
+## Data set 1: Results
+
+- Multivariate AE model provides the best balance between goodness-of-fit and complexity.
+\tiny
+\begin{table}[]
+\caption{Pseudo log-likelihood (\texttt{pll}) values along with the pseudo \textit{Akaike} (\texttt{pAIC}), Bayesian ($pBIC$) information criterion and degrees of freedom (df) by fitted models - Bivariate binary twin data.}
+\label{tab:dataset3}
+\begin{tabular}{lrrrrrrrr}
+\hline
+\multicolumn{1}{|l|}{\multirow{3}{*}{Criterion}} & \multicolumn{8}{c|}{Models}                                                                                                                                                                                   \\ \cline{2-9} 
+\multicolumn{1}{|l|}{}                           & \multicolumn{4}{c|}{Univariate}                                                                       & \multicolumn{4}{c|}{Multivariate}                                                                     \\ \cline{2-9} 
+\multicolumn{1}{|l|}{}                           & \multicolumn{1}{l|}{ACE} & \multicolumn{1}{l|}{CE} & \multicolumn{1}{l|}{AE} & \multicolumn{1}{l|}{E} & \multicolumn{1}{l|}{ACE} & \multicolumn{1}{l|}{CE} & \multicolumn{1}{l|}{AE} & \multicolumn{1}{l|}{E} \\ \hline
+pll  & $-323.03$ & $-334.97$ & $-324.22$ & $-359.99$ & $-311.86$ & $-323.82$ & $-312.90$ & $-347.59$ \\
+pAIC & $686.06$  & $705.94$  & $684.44$  & $751.98$  & $669.72$  & $687.64$  & $665.80$  & $729.18$   \\
+pBIC & $779.75$  & $742.04$  & $748.56$  & $774.86$  & $777.47$  & $781.33$  & $759.49$  & $808.82$ \\
+df   & $20$      & $18$      & $18$      & $16$      & $23$      & $20$      & $20$      &  $17$ \\ \hline            
+\end{tabular}
+\end{table}
+
+
+
+## Data set 1: Results
+
+\begin{table}[]
+\caption{Parameter estimates and standard errors for some genetic and environment indices of interest - Bivariate binary twin data.}
+\label{tab:dataset3gen}
+\begin{tabular}{lrrr}
+\hline
+\multicolumn{1}{|l|}{\multirow{2}{*}{Indices}} & \multicolumn{3}{c|}{Traits} \\ \cline{2-4} 
+\multicolumn{1}{|l|}{} & \multicolumn{1}{l|}{BPD} & \multicolumn{1}{l|}{RDS} & \multicolumn{1}{l|}{BPD $\times$ RDS} \\ \hline
+Heritability            & $0.70(0.15)$ & $0.43(0.07)$ & $0.98(0.18)$ \\
+Environmentality        & $0.30(0.15)$ & $0.57(0.07)$ & $0.02(0.18)$  \\
+Genetic correlation     & $--$         & $--$         & $0.45(0.11)$ \\
+Environment correlation & $--$         & $--$         & $0.01(0.11)$ \\ \hline                                        
+\end{tabular}
+\end{table}
+
 ## Data set 2: Bivariate continuous data
 
 - Traits of interest: body weight and height measures. 
@@ -439,9 +479,15 @@ a linear covariance model.
 - Covariate age was used for modelling both the mean and covariance structures.
 - Responses and covariates were standardized (mean zero and variance one).
 
+## Data set 2: Results
+```{r, echo = FALSE, out.width='65%'}
+knitr::include_graphics("img/FigDataset4.pdf")
+```
+
 # Discussion
 
 ## Main results
+
 - Flexible multivariate statistical modelling framework to deal with twin data.
 - Second-moment assumptions.
 - General framework for estimation based on estimating function.
@@ -452,3 +498,4 @@ a linear covariance model.
 - Future research topics
     1. Weighted estimating functions.
     2. Time to event data.
+- Check the webpage for more examples [mglm4twin](http://www.leg.ufpr.br/~wagner/mglm4twin).
