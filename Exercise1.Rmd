@@ -1,0 +1,99 @@
+---
+title: "Exercise 1 · Body mass index"
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Data set
+
+The goal of this exercise is to provide a very common and simple case
+of twin data analysis using the `mglm4twin` package. In order, to help
+you get familiar with the package, we designed a set of step where
+you can fill the `???` with your choices and run a model.
+
+The example regards a fairly common continuous trait analysis. 
+The dataset is part of the `twinbmi`dataset from the `mets`package.
+In this exercise, we restrict our attention to a subset of the original 
+data set where we have paired observation for both twin. 
+The resulting dataset consists of 4271 (2788 DZ and 1483 MZ) twin-pairs.
+The analysis goal is to investigate the genetic and common environment
+influences on the body mass index (BMI). We have three covariates available:
+`age`, `gender` and `Group`.
+
+```{r}
+library(mglm4twin)
+data(bmi)
+head(bmi)
+```
+
+## Exploratory data analysis
+
+Provide some exploratory analyses to show (if any) the correlation
+between twin pair concerning the trait body mass index. It is important
+to show the difference between MZ and DZ twin. You can use plots and
+numeric summaries like the Pearson correlation.
+
+## Model specification
+
+Remember the model specification is done in three steps:
+
+   1. Specifying the linear predictor (mean model).
+   2. Specifying the matrix linear predictor (twin dependence structure).
+   3. Specifying link and variance function suitable to be response variable type.
+
+Some question to help you to think about each part of the model.
+
+   1. How would you specify the linear predictor for the trait body mass index?
+   2. How would you specify the matrix predictor for the trait body mass index? 
+   Try to create a sequence of increasing complex models and check the difference 
+   between them.
+   3. Which link and variance functions are suitable for this case?
+
+
+### Specyfing the linear predictor
+
+```{r, eval = FALSE}
+linear_pred <- ???
+```
+
+### Specyfing the matrix linear predictor
+
+```{r, eval = FALSE}
+??? = mt_twin(N_DZ = ??, N_MZ = ??, n_resp = ?, model = "??")
+??? = mt_twin(N_DZ = ??, N_MZ = ??, n_resp = ?, model = "??")
+```
+
+
+### Specyfing link and variance functions
+
+```{r, eval = FALSE}
+link = "???"
+variance = "???"
+```
+
+## Model fitting
+
+
+```{r, eval = FALSE}
+fit <- mglm4twin(linear_pred = c(??),
+                 link = link,
+                 variance = variance,
+                 matrix_pred = ???, data = bmi)
+
+```
+
+## Model output
+
+
+```{r, eval = FALSE}
+summary(fit, model = "???", biometric = TRUE)
+
+```
+
